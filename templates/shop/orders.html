@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Your orders{% endblock %}
+{% block content %}
+<section class="section"><div class="wrap narrow">
+  <h1>Your orders</h1>
+  {% for order in orders %}
+    <article class="order">
+      <header><h2>Order #{{ order.pk }}</h2><span class="status status-{{ order.status }}">{{ order.get_status_display }}</span></header>
+      <p class="muted">Placed {{ order.created_at|date:"j M Y" }}. Total ₹{{ order.total|floatformat:"-2g" }}</p>
+      <ul class="mini">{% for item in order.items.all %}<li><span>{{ item.quantity }} × {{ item.product_name }}</span><span>₹{{ item.line_total|floatformat:"-2g" }}</span></li>{% endfor %}</ul>
+    </article>
+  {% empty %}
+    <div class="empty"><h2>No orders yet</h2><p>Your orders will show up here with their delivery status.</p><a class="btn" href="{% url 'shop:list' %}">Shop gear</a></div>
+  {% endfor %}
+</div></section>
+{% endblock %}

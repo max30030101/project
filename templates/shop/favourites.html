@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Your favourites{% endblock %}
+{% block content %}
+<section class="section"><div class="wrap">
+  <h1>Your favourites</h1>
+  {% if items %}
+    <div class="grid">{% for item in items %}{% with product=item.product %}{% include "partials/_product_card.html" %}{% endwith %}{% endfor %}</div>
+  {% else %}
+    <div class="empty"><h2>No favourites yet</h2><p>Tap the heart on any product to save it here for later.</p><a class="btn" href="{% url 'shop:list' %}">Browse the shop</a></div>
+  {% endif %}
+</div></section>
+{% endblock %}

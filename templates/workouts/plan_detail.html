@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}{{ plan.title }}{% endblock %}
+{% block content %}
+<section class="section"><div class="wrap">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="{% url 'workouts:dashboard' %}">Dashboard</a><a href="{% url 'workouts:plans' %}">Plans</a><span>{{ plan.title }}</span></nav>
+  <div class="section-head">
+    <h1>{{ plan.title }}</h1>
+    {% if plan.is_active %}<span class="status status-confirmed">Active plan</span>
+    {% else %}<form method="post" action="{% url 'workouts:plan_activate' plan.id %}">{% csrf_token %}<button class="btn btn-ghost" type="submit">Make this my active plan</button></form>{% endif %}
+  </div>
+  <p class="muted">{{ plan.get_level_display }}, {{ plan.get_equipment_display }}, {{ plan.days_per_week }} days a week.</p>
+  <p class="prose">{{ plan.summary }}</p>
+
+  <div class="plan-days">
+    {% for day in plan.days.all %}
+    <article class="plan-day">
+      <header><h2>Day {{ day.day_number }}: {{ day.title }}</h2>
+        {% if plan.is_active %}<a class="text-link" href="{% url 'workouts:log_workout' %}?day={{ day.id }}">Log this workout</a>{% endif %}</header>
+      <table>
+        <thead><tr><th scope="col">Exercise</th><th scope="col">Sets × reps</th><th scope="col">Rest</th></tr></thead>
+        <tbody>
+        {% for item in day.items.all %}
+          <tr>
+            <th scope="row">{{ item.exercise.name }}{% if item.exercise.description %}<span class="cue">{{ item.exercise.description }}</span>{% endif %}</th>
+            <td>{% if item.sets == 1 %}{{ item.reps }}{% else %}{{ item.sets }} × {{ item.reps }}{% endif %}</td>
+            <td>{% if item.rest_seconds %}{{ item.rest_seconds }} sec{% else %}-{% endif %}</td>
+          </tr>
+        {% empty %}<tr><td colspan="3" class="muted">No exercises found. Ask an admin to run <code>python manage.py seed_demo</code>.</td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </article>
+    {% endfor %}
+  </div>
+
+  {% if gear %}
+  <div class="section-head" style="margin-top:3rem"><h2>Gear that fits this plan</h2><a class="text-link" href="{% url 'shop:list' %}">Browse all gear</a></div>
+  <div class="grid">{% for product in gear %}{% include "partials/_product_card.html" %}{% endfor %}</div>
+  {% endif %}
+</div></section>
+{% endblock %}

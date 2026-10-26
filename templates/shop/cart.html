@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Your cart{% endblock %}
+{% block content %}
+<section class="section"><div class="wrap">
+  <h1>Your cart</h1>
+  {% if items %}
+  <div class="cart-layout">
+    <ul class="cart-list">
+      {% for item in items %}
+      <li class="cart-row">
+        <a class="cart-thumb" href="{{ item.product.get_absolute_url }}">
+          {% if item.product.image %}<img src="{{ item.product.image.url }}" alt="">{% else %}<div class="ph" style="--seed: {{ item.product.id }}"><span>{{ item.product.name|slice:":2" }}</span></div>{% endif %}
+        </a>
+        <div class="cart-info">
+          <h2><a href="{{ item.product.get_absolute_url }}">{{ item.product.name }}</a></h2>
+          <p class="muted">₹{{ item.product.current_price|floatformat:"-2g" }} each</p>
+          {% if item.quantity > item.product.stock %}<p class="stock out">Only {{ item.product.stock }} available. Lower the quantity to check out.</p>{% endif %}
+          <form method="post" action="{% url 'shop:cart_update' item.id %}" class="qty-form">
+            {% csrf_token %}
+            <label for="q{{ item.id }}">Qty</label>
+            <input id="q{{ item.id }}" type="number" name="quantity" min="1" max="{{ item.product.stock }}" value="{{ item.quantity }}">
+            <button class="link-btn" type="submit">Update</button>
+          </form>
+        </div>
+        <div class="cart-side">
+          <strong>₹{{ item.line_total|floatformat:"-2g" }}</strong>
+          <form method="post" action="{% url 'shop:cart_remove' item.id %}">{% csrf_token %}<button class="link-btn" type="submit">Remove</button></form>
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+
+    <aside class="summary">
+      <h2>Order summary</h2>
+      <dl>
+        <div><dt>Subtotal</dt><dd>₹{{ subtotal|floatformat:"-2g" }}</dd></div>
+        <div><dt>Delivery</dt><dd>{% if shipping %}₹{{ shipping|floatformat:"-2g" }}{% else %}Free{% endif %}</dd></div>
+        <div class="total"><dt>Total</dt><dd>₹{{ total|floatformat:"-2g" }}</dd></div>
+      </dl>
+      {% if has_problem %}<p class="stock out">Fix the items marked above before checking out.</p>
+      {% else %}<a class="btn btn-block" href="{% url 'shop:checkout' %}">Proceed to checkout</a>{% endif %}
+      <a class="text-link" href="{% url 'shop:list' %}">Keep shopping</a>
+    </aside>
+  </div>
+  {% else %}
+    <div class="empty"><h2>Your cart is empty</h2><p>Add something from the shop, or pick from your saved favourites.</p>
+      <a class="btn" href="{% url 'shop:list' %}">Shop gear</a> <a class="btn btn-ghost" href="{% url 'shop:favourites' %}">View favourites</a></div>
+  {% endif %}
+</div></section>
+{% endblock %}

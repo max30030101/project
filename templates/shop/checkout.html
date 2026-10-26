@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Checkout{% endblock %}
+{% block content %}
+<section class="section"><div class="wrap">
+  <h1>Checkout</h1>
+  <div class="cart-layout">
+    <form method="post" class="form">
+      {% csrf_token %}
+      <h2>Delivery address</h2>
+      {% include "partials/_form_fields.html" %}
+      <h2>Payment</h2>
+      <p>Cash on delivery. Pay when your order arrives. Online payments are coming soon.</p>
+      <button type="submit" class="btn btn-large">Place order, ₹{{ total|floatformat:"-2g" }}</button>
+    </form>
+    <aside class="summary">
+      <h2>In your order</h2>
+      <ul class="mini">{% for item in items %}<li><span>{{ item.quantity }} × {{ item.product.name }}</span><span>₹{{ item.line_total|floatformat:"-2g" }}</span></li>{% endfor %}</ul>
+      <dl>
+        <div><dt>Subtotal</dt><dd>₹{{ subtotal|floatformat:"-2g" }}</dd></div>
+        <div><dt>Delivery</dt><dd>{% if shipping %}₹{{ shipping|floatformat:"-2g" }}{% else %}Free{% endif %}</dd></div>
+        <div class="total"><dt>Total</dt><dd>₹{{ total|floatformat:"-2g" }}</dd></div>
+      </dl>
+    </aside>
+  </div>
+</div></section>
+{% endblock %}

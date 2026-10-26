@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Workout history{% endblock %}
+{% block content %}
+<section class="section"><div class="wrap">
+  <div class="section-head"><h1>Workout history</h1><a class="btn" href="{% url 'workouts:log_workout' %}">Log a workout</a></div>
+  <div class="history-grid">
+    <div>
+      {% if page_obj.object_list %}
+      <table class="table">
+        <thead><tr><th scope="col">Date</th><th scope="col">Workout</th><th scope="col">Minutes</th><th scope="col">Calories</th><th scope="col"><span class="sr">Actions</span></th></tr></thead>
+        <tbody>
+          {% for log in page_obj %}
+          <tr>
+            <td>{{ log.date|date:"j M Y" }}</td>
+            <th scope="row">{{ log.title }}{% if log.notes %}<span class="cue">{{ log.notes }}</span>{% endif %}</th>
+            <td>{{ log.duration_minutes }}</td><td>{{ log.calories_burned|default:"-" }}</td>
+            <td><form method="post" action="{% url 'workouts:log_delete' log.id %}">{% csrf_token %}<button class="link-btn" type="submit">Delete</button></form></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% include "partials/_pagination.html" %}
+      {% else %}
+        <div class="empty"><h2>No workouts logged yet</h2><p>Log your first session and it will appear here.</p><a class="btn" href="{% url 'workouts:log_workout' %}">Log a workout</a></div>
+      {% endif %}
+    </div>
+    <aside class="panel">
+      <h2>Weight entries</h2>
+      <ul class="plain">{% for w in weights %}<li>{{ w.date|date:"j M Y" }} <strong>{{ w.weight_kg }} kg</strong></li>{% empty %}<li class="muted">No entries yet. Add one from your dashboard.</li>{% endfor %}</ul>
+    </aside>
+  </div>
+</div></section>
+{% endblock %}

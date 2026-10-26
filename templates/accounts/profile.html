@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Your profile{% endblock %}
+{% block content %}
+<section class="section"><div class="wrap narrow">
+  <h1>Your profile</h1>
+  <p class="muted">{{ user.get_full_name|default:user.username }} ({{ user.email }}){% if user.profile.bmi %}. Current BMI: {{ user.profile.bmi }}{% endif %}</p>
+  <form method="post" class="form">
+    {% csrf_token %}
+    {% include "partials/_form_fields.html" %}
+    <button type="submit" class="btn">Save profile</button>
+  </form>
+</div></section>
+{% endblock %}

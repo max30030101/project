@@ -1,0 +1,96 @@
+{% load static %}<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Train smarter, gear up{% endblock %} | FitForge AI</title>
+  <meta name="description" content="{% block meta_desc %}Personalised workout plans, progress tracking and sports gear, all in one place.{% endblock %}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap bar">
+    <a class="brand" href="{% url 'home' %}" aria-label="FitForge AI home">FitForge<span>AI</span></a>
+
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+
+    <nav id="site-nav" class="nav" aria-label="Main">
+      <a href="{% url 'shop:list' %}">Shop</a>
+      {% for c in nav_categories|slice:":4" %}
+        <a class="nav-cat" href="{{ c.get_absolute_url }}">{{ c.name }}</a>
+      {% endfor %}
+      <a href="{% url 'workouts:recommend' %}">AI workouts</a>
+    </nav>
+
+    <form class="search" action="{% url 'shop:list' %}" method="get" role="search">
+      <input type="search" name="q" placeholder="Search dumbbells, rackets, mats" aria-label="Search products">
+      <button type="submit">Search</button>
+    </form>
+
+    <div class="actions">
+      <a class="icon-link" href="{% url 'shop:favourites' %}" aria-label="Favourites ({{ fav_count }})">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+        <span class="count" data-fav-count{% if not fav_count %} hidden{% endif %}>{{ fav_count }}</span>
+      </a>
+      <a class="icon-link" href="{% url 'shop:cart' %}">Cart{% if cart_count %} <span class="count">{{ cart_count }}</span>{% endif %}</a>
+      {% if user.is_authenticated %}
+        <a class="icon-link" href="{% url 'workouts:dashboard' %}">Dashboard</a>
+        <a class="icon-link" href="{% url 'accounts:profile' %}">{{ user.first_name|default:user.username }}</a>
+        <form method="post" action="{% url 'accounts:logout' %}" class="inline">{% csrf_token %}<button type="submit" class="link-btn">Log out</button></form>
+      {% else %}
+        <a class="icon-link" href="{% url 'accounts:login' %}">Sign in</a>
+        <a class="btn btn-small" href="{% url 'accounts:register' %}">Join free</a>
+      {% endif %}
+    </div>
+  </div>
+</header>
+
+{% if messages %}
+<div class="wrap messages" role="status">
+  {% for message in messages %}<p class="msg msg-{{ message.level_tag }}">{{ message }}</p>{% endfor %}
+</div>
+{% endif %}
+
+<main id="main">{% block content %}{% endblock %}</main>
+
+<footer class="site-footer">
+  <div class="wrap foot">
+    <div>
+      <p class="brand">FitForge<span>AI</span></p>
+      <p class="muted">Workout plans that fit your week, and the gear to go with them. Built for India.</p>
+    </div>
+    <div>
+      <h2>Shop</h2>
+      <ul>
+        {% for c in nav_categories %}<li><a href="{{ c.get_absolute_url }}">{{ c.name }}</a></li>{% endfor %}
+      </ul>
+    </div>
+    <div>
+      <h2>Train</h2>
+      <ul>
+        <li><a href="{% url 'workouts:recommend' %}">Get a personalised plan</a></li>
+        <li><a href="{% url 'workouts:dashboard' %}">Dashboard</a></li>
+        <li><a href="{% url 'workouts:history' %}">Workout history</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2>Orders</h2>
+      <ul>
+        <li>Free delivery over ₹999</li>
+        <li>Cash on delivery</li>
+        <li><a href="{% url 'shop:orders' %}">Your orders</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="wrap legal"><p class="muted">© {% now "Y" %} FitForge AI. Workout plans are general guidance, not medical advice.</p></div>
+</footer>
+
+<script src="{% static 'js/main.js' %}" defer></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Log a workout{% endblock %}
+{% block content %}
+<section class="section"><div class="wrap narrow">
+  <h1>Log a workout</h1>
+  <form method="post" class="form">
+    {% csrf_token %}
+    {% include "partials/_form_fields.html" %}
+    <button type="submit" class="btn">Save workout</button> <a class="text-link" href="{% url 'workouts:dashboard' %}">Cancel</a>
+  </form>
+</div></section>
+{% endblock %}

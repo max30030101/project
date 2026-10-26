@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Your plans{% endblock %}
+{% block content %}
+<section class="section"><div class="wrap narrow">
+  <div class="section-head"><h1>Your plans</h1><a class="btn" href="{% url 'workouts:recommend' %}">New plan</a></div>
+  {% for plan in plans %}
+    <article class="order">
+      <header><h2><a href="{% url 'workouts:plan_detail' plan.id %}">{{ plan.title }}</a></h2>{% if plan.is_active %}<span class="status status-confirmed">Active</span>{% endif %}</header>
+      <p class="muted">{{ plan.get_level_display }}, {{ plan.get_equipment_display }}. Created {{ plan.created_at|date:"j M Y" }}.</p>
+    </article>
+  {% empty %}
+    <div class="empty"><h2>No plans yet</h2><p>Tell us your goal and we'll build your first plan.</p><a class="btn" href="{% url 'workouts:recommend' %}">Build my plan</a></div>
+  {% endfor %}
+</div></section>
+{% endblock %}

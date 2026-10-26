@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}AI workout plan{% endblock %}
+{% block content %}
+<section class="section"><div class="wrap narrow">
+  <h1>Build your workout plan</h1>
+  <p class="muted">Answer four questions. FitForge picks exercises that match your level and equipment, and sets sensible sets, reps and rest for your goal. Generating a new plan replaces your active one; old plans stay in your plan list.</p>
+  <form method="post" class="form">
+    {% csrf_token %}
+    {% include "partials/_form_fields.html" %}
+    <button type="submit" class="btn btn-large">Generate my plan</button>
+  </form>
+</div></section>
+{% endblock %}

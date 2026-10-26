@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Order placed{% endblock %}
+{% block content %}
+<section class="section"><div class="wrap narrow">
+  <h1>Order #{{ order.pk }} is placed</h1>
+  <p>Thanks, {{ order.full_name }}. We'll deliver to {{ order.address_line }}, {{ order.city }}, {{ order.state }} {{ order.pincode }}. Pay ₹{{ order.total|floatformat:"-2g" }} in cash on delivery.</p>
+  <ul class="mini">{% for item in order.items.all %}<li><span>{{ item.quantity }} × {{ item.product_name }}</span><span>₹{{ item.line_total|floatformat:"-2g" }}</span></li>{% endfor %}</ul>
+  <p><a class="btn" href="{% url 'shop:orders' %}">View my orders</a> <a class="btn btn-ghost" href="{% url 'shop:list' %}">Keep shopping</a></p>
+</div></section>
+{% endblock %}

@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block title %}Personalised workouts and sports gear{% endblock %}
+{% block content %}
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <h1>Your plan for the week, and the gear to run it.</h1>
+      <p class="lead">Tell FitForge your goal, your experience and how many days you can train. It builds a plan from a library of exercises that suit your equipment. Then shop the kit, log every session and watch your numbers move.</p>
+      <p class="hero-links">
+        <a class="btn btn-large" href="{% url 'shop:list' %}">Shop gear</a>
+        <a class="text-link" href="{% url 'workouts:recommend' %}">Build my plan</a>
+      </p>
+    </div>
+
+    <form class="quick-plan" action="{% url 'workouts:recommend' %}" method="get">
+      <h2>Quick plan</h2>
+      <p class="muted">Four answers. Sign in or join to save it.</p>
+      <div class="field"><label for="qp-goal">Goal</label>
+        <select id="qp-goal" name="goal">
+          <option value="build_muscle">Build muscle</option><option value="lose_fat">Lose fat</option>
+          <option value="strength">Get stronger</option><option value="endurance">Boost endurance</option>
+          <option value="general">General fitness</option>
+        </select></div>
+      <div class="field"><label for="qp-level">Experience</label>
+        <select id="qp-level" name="level">
+          <option value="beginner">Beginner</option><option value="intermediate">Intermediate</option><option value="advanced">Advanced</option>
+        </select></div>
+      <div class="field"><label for="qp-eq">Equipment</label>
+        <select id="qp-eq" name="equipment">
+          <option value="gym">Full gym</option><option value="home">Home (dumbbells, bands)</option><option value="none">No equipment</option>
+        </select></div>
+      <div class="field"><label for="qp-days">Days per week</label>
+        <select id="qp-days" name="days_per_week">
+          <option>2</option><option selected>3</option><option>4</option><option>5</option><option>6</option>
+        </select></div>
+      <button type="submit" class="btn btn-block">Generate my plan</button>
+    </form>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head"><h2>Shop by category</h2><a class="text-link" href="{% url 'shop:list' %}">View all products</a></div>
+    <ul class="cat-grid">
+      {% for c in categories %}
+        <li><a href="{{ c.get_absolute_url }}">
+          <span class="cat-name">{{ c.name }}</span>
+          <span class="muted">{{ c.n }} product{{ c.n|pluralize }}</span>
+        </a></li>
+      {% empty %}
+        <li class="muted">No categories yet. Add them in the admin panel, or run <code>python manage.py seed_demo</code>.</li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+
+<section class="section section-tint">
+  <div class="wrap">
+    <div class="section-head"><h2>Featured gear</h2><a class="text-link" href="{% url 'shop:list' %}?on_sale=1">See what's on sale</a></div>
+    <div class="grid">
+      {% for product in featured %}{% include "partials/_product_card.html" %}
+      {% empty %}<p class="muted">Featured products appear here once you mark them as featured in the admin panel.</p>{% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap steps">
+    <h2>How FitForge works</h2>
+    <ol>
+      <li><h3>Tell us about you</h3><p>Set your goal, experience level, equipment and training days.</p></li>
+      <li><h3>Get your plan</h3><p>Each session lists exercises, sets, reps and rest, chosen for what you actually have.</p></li>
+      <li><h3>Log and track</h3><p>Record workouts and body weight. Your dashboard shows streaks, minutes and trends.</p></li>
+      <li><h3>Gear up</h3><p>Your plan suggests kit that matches your goal, from skipping ropes to barbells.</p></li>
+    </ol>
+  </div>
+</section>
+
+{% if new_arrivals %}
+<section class="section section-tint">
+  <div class="wrap">
+    <div class="section-head"><h2>New arrivals</h2></div>
+    <div class="grid">{% for product in new_arrivals %}{% include "partials/_product_card.html" %}{% endfor %}</div>
+  </div>
+</section>
+{% endif %}
+
+<section class="section">
+  <div class="wrap cta">
+    <h2>Free to start. More coming for members.</h2>
+    <p>Premium plans, trainer booking and gym partnerships are on the roadmap. Join now and you'll be first in line.</p>
+    <a class="btn" href="{% url 'accounts:register' %}">Create a free account</a>
+  </div>
+</section>
+{% endblock %}

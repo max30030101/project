@@ -1,0 +1,6 @@
+{
+  "python.terminal.activateEnvironment": true,
+  "files.associations": { "*.html": "django-html" },
+  "emmet.includeLanguages": { "django-html": "html" },
+  "editor.formatOnSave": false
+}

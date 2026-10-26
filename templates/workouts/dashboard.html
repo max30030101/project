@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<section class="section"><div class="wrap">
+  <div class="section-head">
+    <h1>Hi {{ user.first_name|default:user.username }}</h1>
+    <p><a class="btn" href="{% url 'workouts:log_workout' %}">Log a workout</a> <a class="btn btn-ghost" href="{% url 'workouts:recommend' %}">New plan</a></p>
+  </div>
+
+  <dl class="stats">
+    <div><dt>Workouts this week</dt><dd>{{ week_count }}</dd></div>
+    <div><dt>Minutes this week</dt><dd>{{ week_minutes }}</dd></div>
+    <div><dt>Calories this week</dt><dd>{{ week_calories }}</dd></div>
+    <div><dt>Day streak</dt><dd>{{ streak }}</dd></div>
+  </dl>
+
+  <div class="dash-grid">
+    <article class="panel">
+      <h2>Next up</h2>
+      {% if plan and next_day %}
+        <p class="muted">{{ plan.title }}</p>
+        <h3>Day {{ next_day.day_number }}: {{ next_day.title }}</h3>
+        <ul class="plain">{% for item in next_day.items.all|slice:":6" %}<li>{{ item.exercise.name }} <span class="muted">{% if item.sets == 1 %}{{ item.reps }}{% else %}{{ item.sets }} × {{ item.reps }}{% endif %}</span></li>{% endfor %}</ul>
+        <p><a class="btn" href="{% url 'workouts:log_workout' %}?day={{ next_day.id }}">Log it as done</a> <a class="text-link" href="{% url 'workouts:plan_detail' plan.id %}">Full plan</a></p>
+      {% else %}
+        <p>You don't have an active plan yet. It takes about 30 seconds.</p>
+        <a class="btn" href="{% url 'workouts:recommend' %}">Build my plan</a>
+      {% endif %}
+    </article>
+
+    <article class="panel">
+      <h2>Last 7 days</h2>
+      <ol class="bars" aria-label="Minutes trained per day">
+        {% for d in activity %}
+          <li{% if d.today %} class="today"{% endif %}><span class="bar" style="height: {{ d.pct }}%" title="{{ d.minutes }} min"></span><span class="lbl">{{ d.label }}</span><span class="val">{{ d.minutes }}</span></li>
+        {% endfor %}
+      </ol>
+      <p class="muted">{{ total_workouts }} workout{{ total_workouts|pluralize }} logged in total.</p>
+    </article>
+
+    <article class="panel">
+      <h2>Body weight</h2>
+      <p class="big">{% if latest_weight %}{{ latest_weight }} kg{% else %}No entries yet{% endif %}
+        {% if weight_change is not None %}<span class="muted small">{% if weight_change > 0 %}+{% endif %}{{ weight_change }} kg since first entry shown</span>{% endif %}</p>
+      <div id="weight-chart" class="chart" role="img" aria-label="Line chart of your recent weight entries"></div>
+      {{ weight_data|json_script:"weight-data" }}
+      <form method="post" action="{% url 'workouts:add_weight' %}" class="inline-form">
+        {% csrf_token %}
+        <label>Date {{ weight_form.date }}</label>
+        <label>Weight (kg) {{ weight_form.weight_kg }}</label>
+        <button class="btn btn-small" type="submit">Save</button>
+      </form>
+    </article>
+
+    <article class="panel">
+      <h2>Recent workouts</h2>
+      <ul class="plain">
+        {% for log in recent %}<li><strong>{{ log.title }}</strong> <span class="muted">{{ log.date|date:"j M" }}, {{ log.duration_minutes }} min</span></li>
+        {% empty %}<li class="muted">Nothing logged yet. Your first one starts the streak.</li>{% endfor %}
+      </ul>
+      <a class="text-link" href="{% url 'workouts:history' %}">Full history</a>
+    </article>
+  </div>
+
+  {% if gear %}
+  <div class="section-head" style="margin-top:3rem"><h2>Gear picked for your goal</h2><a class="text-link" href="{% url 'shop:list' %}">Shop all</a></div>
+  <div class="grid">{% for product in gear %}{% include "partials/_product_card.html" %}{% endfor %}</div>
+  {% endif %}
+</div></section>
+{% endblock %}

@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}{% if active_category %}{{ active_category.name }}{% else %}Shop all gear{% endif %}{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb">
+      <a href="{% url 'home' %}">Home</a>
+      {% if active_category %}<a href="{% url 'shop:list' %}">Shop</a><span>{{ active_category.name }}</span>{% else %}<span>Shop</span>{% endif %}
+    </nav>
+    <h1>{% if active_category %}{{ active_category.name }}{% else %}Shop all gear{% endif %}</h1>
+    {% if active_category.description %}<p class="muted">{{ active_category.description }}</p>{% endif %}
+
+    <ul class="chips" aria-label="Categories">
+      <li><a href="{% url 'shop:list' %}"{% if not active_category %} class="on"{% endif %}>All</a></li>
+      {% for c in categories %}<li><a href="{{ c.get_absolute_url }}"{% if active_category.pk == c.pk %} class="on"{% endif %}>{{ c.name }}</a></li>{% endfor %}
+    </ul>
+
+    <div class="shop-layout">
+      <aside class="filters">
+        <form id="filter-form" method="get">
+          <div class="field"><label for="f-q">Search</label><input id="f-q" type="search" name="q" value="{{ q }}" placeholder="Name, brand or type"></div>
+
+          {% if not active_category %}
+          <fieldset><legend>Category</legend>
+            {% for c in categories %}
+              <label class="check"><input type="checkbox" name="category" value="{{ c.slug }}"{% if c.slug in selected_categories %} checked{% endif %}> {{ c.name }} <span class="muted">({{ c.n }})</span></label>
+            {% endfor %}
+          </fieldset>
+          {% endif %}
+
+          {% if brands %}
+          <fieldset><legend>Brand</legend>
+            {% for b in brands %}<label class="check"><input type="checkbox" name="brand" value="{{ b }}"{% if b in selected_brands %} checked{% endif %}> {{ b }}</label>{% endfor %}
+          </fieldset>
+          {% endif %}
+
+          <fieldset><legend>Price (₹)</legend>
+            <div class="price-range">
+              <input type="number" min="0" name="min_price" value="{{ min_price }}" placeholder="{{ price_bounds.lo|floatformat:0 }}" aria-label="Minimum price">
+              <span>to</span>
+              <input type="number" min="0" name="max_price" value="{{ max_price }}" placeholder="{{ price_bounds.hi|floatformat:0 }}" aria-label="Maximum price">
+            </div>
+          </fieldset>
+
+          <label class="check"><input type="checkbox" name="in_stock" value="1"{% if in_stock %} checked{% endif %}> In stock only</label>
+          <label class="check"><input type="checkbox" name="on_sale" value="1"{% if on_sale %} checked{% endif %}> On sale</label>
+
+          <button type="submit" class="btn btn-block">Apply filters</button>
+          {% if has_filters %}<a class="text-link clear" href="{{ request.path }}">Clear all filters</a>{% endif %}
+        </form>
+      </aside>
+
+      <div class="results">
+        <div class="toolbar">
+          <p><strong>{{ total }}</strong> product{{ total|pluralize }}{% if q %} for “{{ q }}”{% endif %}</p>
+          <label>Sort by
+            <select name="sort" form="filter-form" data-autosubmit>
+              {% for key, label in sorts %}<option value="{{ key }}"{% if sort == key %} selected{% endif %}>{{ label }}</option>{% endfor %}
+            </select>
+          </label>
+        </div>
+
+        {% if products %}
+          <div class="grid">{% for product in products %}{% include "partials/_product_card.html" %}{% endfor %}</div>
+          {% include "partials/_pagination.html" %}
+        {% else %}
+          <div class="empty">
+            <h2>Nothing matches those filters</h2>
+            <p>Try removing a filter, widening the price range or searching for something broader.</p>
+            <a class="btn" href="{{ request.path }}">Clear filters</a>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
