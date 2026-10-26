@@ -1,4 +1,4 @@
-/* FitForge AI: small progressive enhancements. The site works without JavaScript. */
+/* FITNESS ZONE: small progressive enhancements. The site works without JavaScript. */
 (function () {
   "use strict";
 

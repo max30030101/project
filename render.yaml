@@ -1,26 +1,28 @@
 # One-click blueprint for Render.com: web service + PostgreSQL database.
 databases:
-  - name: fitforge-db
-    databaseName: fitforge
+  - name: fitnesszone-db
+    databaseName: fitnesszone
     plan: free
 
 services:
   - type: web
-    name: fitforge-ai
+    name: fitness-zone
     runtime: python
     plan: free
     buildCommand: bash build.sh
-    startCommand: gunicorn fitforge.wsgi:application
+    startCommand: gunicorn fitnesszone.wsgi:application
     envVars:
       - key: PYTHON_VERSION
         value: 3.12.3
+      - key: SITE_NAME
+        value: FITNESS ZONE
       - key: DJANGO_DEBUG
         value: "0"
       - key: DJANGO_SECRET_KEY
         generateValue: true
       - key: DATABASE_URL
         fromDatabase:
-          name: fitforge-db
+          name: fitnesszone-db
           property: connectionString
       - key: SEED_DEMO
         value: "1"

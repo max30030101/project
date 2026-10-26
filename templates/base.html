@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% block title %}Train smarter, gear up{% endblock %} | FitForge AI</title>
+  <title>{% block title %}Train smarter, gear up{% endblock %} | {{ site_name }}</title>
   <meta name="description" content="{% block meta_desc %}Personalised workout plans, progress tracking and sports gear, all in one place.{% endblock %}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,7 +15,7 @@
 
 <header class="site-header">
   <div class="wrap bar">
-    <a class="brand" href="{% url 'home' %}" aria-label="FitForge AI home">FitForge<span>AI</span></a>
+    <a class="brand" href="{% url 'home' %}" aria-label="{{ site_name }} home">{{ brand_main }}{% if brand_accent %}<span>{{ brand_accent }}</span>{% endif %}</a>
 
     <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
 
@@ -61,7 +61,7 @@
 <footer class="site-footer">
   <div class="wrap foot">
     <div>
-      <p class="brand">FitForge<span>AI</span></p>
+      <p class="brand">{{ brand_main }}{% if brand_accent %}<span>{{ brand_accent }}</span>{% endif %}</p>
       <p class="muted">Workout plans that fit your week, and the gear to go with them. Built for India.</p>
     </div>
     <div>
@@ -87,7 +87,7 @@
       </ul>
     </div>
   </div>
-  <div class="wrap legal"><p class="muted">© {% now "Y" %} FitForge AI. Workout plans are general guidance, not medical advice.</p></div>
+  <div class="wrap legal"><p class="muted">© {% now "Y" %} {{ site_name }}. Workout plans are general guidance, not medical advice.</p></div>
 </footer>
 
 <script src="{% static 'js/main.js' %}" defer></script>

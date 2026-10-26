@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth import login
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 
@@ -15,7 +16,7 @@ def register(request):
         user = form.save()
         login(request, user, backend="accounts.backends.EmailOrUsernameBackend")
         send_welcome_email(user)
-        messages.success(request, f"Welcome to FitForge AI, {user.first_name}! A welcome email is on its way.")
+        messages.success(request, f"Welcome to {settings.SITE_NAME}, {user.first_name}! A welcome email is on its way.")
         return redirect("workouts:recommend")
     return render(request, "accounts/register.html", {"form": form})
 

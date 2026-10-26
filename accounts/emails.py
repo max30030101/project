@@ -12,8 +12,12 @@ def send_welcome_email(user):
     if not user.email:
         return False
     name = user.first_name or user.username
-    ctx = {"user": user, "name": name, "site_url": settings.SITE_URL}
-    subject = f"Welcome to FitForge AI, {name}"
+    main, _, accent = settings.SITE_NAME.rpartition(" ")
+    if not main:
+        main, accent = settings.SITE_NAME, ""
+    ctx = {"user": user, "name": name, "site_url": settings.SITE_URL, "site_name": settings.SITE_NAME,
+           "brand_main": main, "brand_accent": accent}
+    subject = f"Welcome to {settings.SITE_NAME}, {name}"
     text_body = render_to_string("emails/welcome.txt", ctx)
     html_body = render_to_string("emails/welcome.html", ctx)
     message = EmailMultiAlternatives(subject, text_body, settings.DEFAULT_FROM_EMAIL, [user.email])

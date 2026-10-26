@@ -1,6 +1,6 @@
 Hi {{ name }},
 
-Welcome to FitForge AI. Your account is ready.
+Welcome to {{ site_name }}. Your account is ready.
 
 Here's how to get going:
 1. Build your personalised plan: {{ site_url }}/workouts/recommend/
@@ -8,4 +8,4 @@ Here's how to get going:
 3. Log workouts and track progress: {{ site_url }}/workouts/dashboard/
 
 See you in the gym,
-The FitForge AI team
+The {{ site_name }} team

@@ -2,7 +2,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Django: run FitForge AI",
+      "name": "Django: run FITNESS ZONE",
       "type": "debugpy",
       "request": "launch",
       "program": "${workspaceFolder}/manage.py",

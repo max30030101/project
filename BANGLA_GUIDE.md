@@ -1,6 +1,6 @@
-# FitForge AI — সম্পূর্ণ বাংলা গাইড
+# FITNESS ZONE — সম্পূর্ণ বাংলা গাইড
 
-FitForge AI হলো Django (Python) দিয়ে তৈরি একটি ফুল-স্ট্যাক ওয়েবসাইট। এখানে ব্যক্তিগত ওয়ার্কআউট প্ল্যান, ফিটনেস ট্র্যাকিং এবং অনলাইনে স্পোর্টস গিয়ার কেনাকাটা, সবকিছু এক জায়গায় আছে। প্রাথমিক বাজার ভারত।
+FITNESS ZONE হলো Django (Python) দিয়ে তৈরি একটি ফুল-স্ট্যাক ওয়েবসাইট। এখানে ব্যক্তিগত ওয়ার্কআউট প্ল্যান, ফিটনেস ট্র্যাকিং এবং অনলাইনে স্পোর্টস গিয়ার কেনাকাটা, সবকিছু এক জায়গায় আছে। প্রাথমিক বাজার ভারত।
 
 > গুরুত্বপূর্ণ: এই কোড আমি নিজের পরিবেশে চালিয়ে দেখতে পারিনি, কারণ সেখানে Django ইনস্টল করা যায়নি। শুধু কোড কম্পাইল হচ্ছে কিনা এবং টেমপ্লেট, URL ও view-এর নামগুলো মিলছে কিনা, সেটুকু যাচাই করেছি। প্রথমবার চালানোর সময় কোনো error এলে পুরো error লেখাটা আমাকে পাঠান, ঠিক করে দেব।
 
@@ -56,14 +56,14 @@ FitForge AI হলো Django (Python) দিয়ে তৈরি একটি 
 ## ৪. ফোল্ডার কাঠামো ও ফাইলের কাজ
 
 ```
-fitforge-ai/
+fitness-zone/
 ├── manage.py                  Django কমান্ড চালানোর ফাইল
 ├── requirements.txt           প্রয়োজনীয় Python প্যাকেজ
 ├── build.sh                   লাইভ সার্ভারে বিল্ড স্ক্রিপ্ট
 ├── render.yaml                Render.com-এ এক ক্লিকে ডেপ্লয়ের কনফিগ
 ├── Procfile                   সার্ভার চালু করার কমান্ড
 ├── .env.example               পরিবেশ ভেরিয়েবলের নমুনা
-├── fitforge/                  প্রকল্পের সেটিংস
+├── fitnesszone/                  প্রকল্পের সেটিংস
 │   ├── settings.py            সব কনফিগারেশন (ডাটাবেস, ইমেইল, নিরাপত্তা)
 │   └── urls.py                মূল URL তালিকা
 ├── accounts/                  ইউজার অ্যাকাউন্ট অ্যাপ
@@ -96,7 +96,7 @@ fitforge-ai/
 
 **আগে যা লাগবে:** Python 3.10 বা নতুন (python.org থেকে; Windows-এ "Add Python to PATH" টিক দিন), VS Code এবং VS Code-এর Python এক্সটেনশন।
 
-1. ZIP আনজিপ করুন। VS Code-এ **File → Open Folder** দিয়ে `fitforge-ai` ফোল্ডার খুলুন।
+1. ZIP আনজিপ করুন। VS Code-এ **File → Open Folder** দিয়ে `fitness-zone` ফোল্ডার খুলুন।
 2. **Terminal → New Terminal** খুলে নিচের কমান্ডগুলো পরপর চালান।
 
    **Windows (PowerShell):**
@@ -123,7 +123,7 @@ fitforge-ai/
    `createsuperuser` চালালে অ্যাডমিনের ইউজারনেম, ইমেইল ও পাসওয়ার্ড জিজ্ঞেস করবে।
 4. সাইট চালু করুন: `python manage.py runserver`
 5. ব্রাউজারে খুলুন: http://127.0.0.1:8000/ এবং অ্যাডমিন প্যানেল: http://127.0.0.1:8000/admin/
-6. চাইলে VS Code-এ **F5** চেপে "Django: run FitForge AI" বেছে ডিবাগারসহ চালাতে পারেন।
+6. চাইলে VS Code-এ **F5** চেপে "Django: run FITNESS ZONE" বেছে ডিবাগারসহ চালাতে পারেন।
 
 বন্ধ করতে Ctrl+C। পরের বার শুধু venv activate করে `python manage.py runserver` চালালেই হবে।
 
@@ -146,18 +146,18 @@ fitforge-ai/
    ```bash
    git init
    git add .
-   git commit -m "FitForge AI"
+   git commit -m "FITNESS ZONE"
    git branch -M main
-   git remote add origin https://github.com/<আপনার-ইউজারনেম>/fitforge-ai.git
+   git remote add origin https://github.com/<আপনার-ইউজারনেম>/fitness-zone.git
    git push -u origin main
    ```
 3. render.com-এ অ্যাকাউন্ট খুলুন। **New → Blueprint** বেছে GitHub repository সংযুক্ত করুন। Render `render.yaml` পড়ে ওয়েবসাইট ও PostgreSQL ডাটাবেস নিজেই বানাবে।
 4. জিজ্ঞেস করলে `DJANGO_SUPERUSER_PASSWORD` (অ্যাডমিন পাসওয়ার্ড) ও `DJANGO_SUPERUSER_EMAIL` দিন।
-5. **Apply** চাপুন। কয়েক মিনিট পর সাইট লাইভ হবে, যেমন `https://fitforge-ai.onrender.com` (Render আপনাকে সঠিক URL দেখাবে)।
+5. **Apply** চাপুন। কয়েক মিনিট পর সাইট লাইভ হবে, যেমন `https://fitness-zone.onrender.com` (Render আপনাকে সঠিক URL দেখাবে)।
 6. `/admin/`-এ গিয়ে ইউজারনেম `admin` ও আপনার দেওয়া পাসওয়ার্ড দিয়ে ঢুকুন। এবার আসল প্রোডাক্ট ও ছবি যোগ করুন।
 7. **নিজের ডোমেইন:** Render ড্যাশবোর্ড → Settings → Custom Domains। তারপর `DJANGO_ALLOWED_HOSTS`-এ ডোমেইন এবং `CSRF_TRUSTED_ORIGINS`-এ `https://আপনার-ডোমেইন` যোগ করুন, আর `SITE_URL` সেট করুন।
 
-অন্য হোস্টিং (PythonAnywhere, VPS ইত্যাদি)-এও চলবে: `.env.example`-এর ভেরিয়েবল সেট করুন, বিল্ডে `bash build.sh` এবং স্টার্ট কমান্ডে `gunicorn fitforge.wsgi:application` ব্যবহার করুন।
+অন্য হোস্টিং (PythonAnywhere, VPS ইত্যাদি)-এও চলবে: `.env.example`-এর ভেরিয়েবল সেট করুন, বিল্ডে `bash build.sh` এবং স্টার্ট কমান্ডে `gunicorn fitnesszone.wsgi:application` ব্যবহার করুন।
 
 ## ৯. সত্যিকারের ওয়েলকাম ইমেইল চালু করা
 
@@ -170,7 +170,7 @@ EMAIL_PORT=587
 EMAIL_USE_TLS=1
 EMAIL_HOST_USER=আপনার@gmail.com
 EMAIL_HOST_PASSWORD=আপনার-app-password
-DEFAULT_FROM_EMAIL=FitForge AI <আপনার@gmail.com>
+DEFAULT_FROM_EMAIL=FITNESS ZONE <আপনার@gmail.com>
 ```
 
 ইমেইল পাঠাতে ব্যর্থ হলেও রেজিস্ট্রেশন আটকাবে না; ত্রুটিটি শুধু লগে লেখা হবে।
@@ -211,3 +211,21 @@ DEFAULT_FROM_EMAIL=FitForge AI <আপনার@gmail.com>
 ## ১৩. পরবর্তী উন্নয়ন (আপনার ব্যবসায়িক পরিকল্পনা অনুযায়ী)
 
 অনলাইন পেমেন্ট (Razorpay/UPI), অর্ডার ট্র্যাকিং, প্রোডাক্ট রিভিউ, প্রিমিয়াম সাবস্ক্রিপশন (`Profile.is_premium` প্রস্তুত আছে), উন্নত AI কোচিং (LLM), ট্রেইনার বুকিং এবং জিম পার্টনারশিপ।
+
+## ১৪. ওয়েবসাইটের নাম বদলানোর সহজ উপায়
+
+নাম এখন মাত্র **একটি জায়গায়** লেখা আছে। সেটা বদলালে হেডারের লোগো, পেজের শিরোনাম, ফুটার, ওয়েলকাম ইমেইল ও অ্যাডমিন প্যানেলের নাম, সব একসাথে বদলে যায়।
+
+**লোকাল কম্পিউটারে:** `fitnesszone/settings.py` ফাইল খুলে এই লাইনটা খুঁজুন:
+
+```python
+SITE_NAME = os.environ.get("SITE_NAME", "FITNESS ZONE")
+```
+
+ডবল কোটের ভেতরের `FITNESS ZONE` মুছে নতুন নাম লিখুন, ফাইল সেভ করুন (Ctrl+S)। সার্ভার চালু থাকলে নিজে থেকেই রিলোড হবে।
+
+**লাইভ সাইটে:** Render ড্যাশবোর্ড → আপনার সার্ভিস → Environment-এ `SITE_NAME` ভেরিয়েবলের মান বদলান।
+
+**লোগোর রং:** নামের শেষ শব্দটা হলুদ রঙে দেখায়। যেমন `FITNESS ZONE` হলে "ZONE" হলুদ। এক শব্দের নাম দিলে পুরোটা সাদা দেখাবে।
+
+**যা বদলাবে না:** প্রকল্পের ভেতরের ফোল্ডারের নাম `fitnesszone` বদলানোর দরকার নেই। এটা ব্যবহারকারীরা দেখতে পায় না।

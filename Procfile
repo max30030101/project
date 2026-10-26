@@ -1,1 +1,1 @@
-web: gunicorn fitforge.wsgi:application
+web: gunicorn fitnesszone.wsgi:application
